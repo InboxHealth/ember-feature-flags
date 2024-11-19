@@ -1,16 +1,30 @@
-import config from "../config/environment";
-import Features from "../features/-main";
+import config from '../config/environment';
+import Features from 'ember-feature-flags/features';
+import { deprecate, isNone } from '@ember/debug';
 
-export function initialize(application) {
-  var serviceName = config.featureFlagsService || "features";
-  application.register("features:-main", Features);
-  application.inject("route", serviceName, "features:-main");
-  application.inject("controller", serviceName, "features:-main");
-  application.inject("component", serviceName, "features:-main");
-  application.inject("features:-main", "application", "application:main");
+const MainFeatures = Features.extend({
+  init: function () {
+    this._super.apply(this, arguments);
+
+    if (this.application && !isNone(this.application.FEATURES)) {
+      deprecate('[ember-feature-flags] Setting feature flags via `APP.FEATURES` is deprecated and will be removed.');
+      this.setup(this.application.FEATURES);
+    } else if (config.featureFlags) {
+      this.setup(config.featureFlags);
+    }
+  },
+});
+
+export function initialize(appInstance) {
+  const serviceName = config.featureFlagsService || 'features';
+
+  appInstance.register('features:-main', MainFeatures);
+  appInstance.inject('route', serviceName, 'features:-main');
+  appInstance.inject('controller', serviceName, 'features:-main');
+  appInstance.inject('component', serviceName, 'features:-main');
+  appInstance.inject('features:-main', 'application', 'application:main');
 }
 
 export default {
-  name: "ember-feature-flags",
-  initialize: initialize,
+  initialize,
 };

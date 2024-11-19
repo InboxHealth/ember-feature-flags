@@ -1,17 +1,5 @@
-<h2 id='title'>Welcome to Ember.js</h2>
+{{page-title "Dummy"}}
+
+<h2 id="title">Welcome to Ember</h2>
 
 {{outlet}}
-
-{{#if features.acceptanceFeature}}
-  <div class="acceptance-feature-on">ACCEPTANCE FEATURE ON</div>
-{{else}}
-  <div class="acceptance-feature-off">ACCEPTANCE FEATURE OFF</div>
-{{/if}}
-
-{{#if features.featureFromConfig}}
-  <div class="feature-from-config-on">CONFIG FEATURE ON</div>
-{{else}}
-  <div class="feature-from-config-off">CONFIG FEATURE OFF</div>
-{{/if}}
-
-<a {{action "toggleAcceptanceFeatureOff"}} class="test-turn-acceptance-off">Turn Acceptance Feature off</a>
